@@ -21,9 +21,14 @@ type GoogleAI struct {
 var _ llms.Model = &GoogleAI{}
 
 // New creates a new GoogleAI client with provided client.
-func NewWithClient(client *genai.Client) (*GoogleAI, error) {
+func NewWithClient(client *genai.Client, opts ...Option) (*GoogleAI, error) {
+	clientOptions := DefaultOptions()
+	for _, opt := range opts {
+		opt(&clientOptions)
+	}
+
 	gi := &GoogleAI{
-		opts: DefaultOptions(),
+		opts: clientOptions,
 	}
 	gi.client = client
 	return gi, nil
